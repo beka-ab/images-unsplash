@@ -1,0 +1,19 @@
+.header {
+  background-color: #557a95;
+  padding: 20px 0px;
+}
+.heading-lists {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 10vw;
+}
+.heading-list {
+  list-style: none;
+  cursor: pointer;
+  color: white;
+}
+.heading-list:hover {
+  color: pink;
+  transition: all 0.3s ease-in-out;
+}
