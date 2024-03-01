@@ -4,10 +4,10 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-
 import { fetchImages } from "../../helper/fetchImages";
-import React from "react";
+
 const queryClient = new QueryClient();
+
 interface HomeProps {
   searchTerm: string;
 }

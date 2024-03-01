@@ -1,5 +1,6 @@
 import "./search.scss";
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
+import _debounce from "lodash/debounce";
 interface SearchProps {
   onSearch?: (term: string) => void;
 }
@@ -11,15 +12,18 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSearch = _debounce((term: string) => {
     if (onSearch) {
-      onSearch(searchTerm);
+      onSearch(term);
     }
-  };
+  }, 500);
+
+  useEffect(() => {
+    handleSearch(searchTerm);
+  }, [searchTerm, handleSearch]);
   return (
     <>
-      <form className="input-form" onSubmit={handleSubmit}>
+      <form className="input-form">
         <input
           className="input"
           type="text"
@@ -27,7 +31,6 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
           value={searchTerm}
           onChange={handleChange}
         />
-        <button type="submit">Search</button>
       </form>
     </>
   );

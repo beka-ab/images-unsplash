@@ -27,7 +27,7 @@ export const fetchImages = async (
       query: searchTerm,
     },
   });
-  console.log(response);
+
   if (searchTerm) {
     return response.data.results as Image[];
   } else {
