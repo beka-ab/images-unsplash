@@ -3,3 +3,119 @@
   padding: 0;
   box-sizing: border-box;
 }
+@import url("https://fonts.googleapis.com/css2?family=Madimi+One&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: "Madimi One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 2rem;
+  width: 100%;
+  height: auto;
+  color: #222;
+  background: linear-gradient(to bottom, #9cecfb, #65c7f7, #0052d4);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem;
+}
+
+#root {
+  width: 100%;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search {
+  height: 5.4rem;
+  border-radius: 9999px;
+  padding-inline: 2rem;
+  font-size: 2rem;
+  border: none;
+  outline: none;
+  margin-bottom: 5rem;
+  position: relative;
+}
+
+.search:focus {
+  outline: solid 1px hsl(8 99% 67%);
+}
+
+.search-img {
+  position: absolute;
+  top: 12px;
+  right: 1px;
+}
+
+.name {
+  margin-left: 1rem;
+  font-weight: 900;
+  font-size: 1rem;
+  color: hsl(8 99% 67%);
+}
+
+.loader {
+  position: absolute;
+  top: -11rem;
+  left: 27rem;
+}
+
+.loader-bottom {
+  position: absolute;
+  bottom: -7rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.loader-img {
+  width: 10rem;
+  height: 7rem;
+}
+.history-container {
+  display: flex;
+}
+.history-heading {
+  margin-bottom: 4rem;
+}
+
+.history-list {
+  margin-bottom: 4rem;
+  border: solid 1px gray;
+  border-radius: 20px;
+  padding: 2rem;
+  background: linear-gradient(to bottom, #076585, #fff);
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.history-list li {
+  list-style: none;
+  padding: 0px 10px;
+  color: hsl(8 99% 67%);
+  cursor: pointer;
+}
+
+.history-list li:hover {
+  font-weight: 900;
+  transition: all 0.2s ease;
+}

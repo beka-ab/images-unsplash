@@ -1,6 +1,6 @@
 import { useRef } from "react";
-import Images from "../components/Photos";
-import Modal from "../components/Modal";
+import Images from "../components/photos/Photos";
+import Modal from "../components/modal/Modal";
 import { useKey } from "../helper/useCustom";
 import { HomeProps } from "../types";
 

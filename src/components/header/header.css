@@ -1,0 +1,17 @@
+.lists {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.list {
+  list-style: none;
+  text-decoration: none;
+}
+.home {
+  display: flex;
+  flex-direction: column;
+}
+
+.heading {
+  margin-bottom: 2rem;
+}

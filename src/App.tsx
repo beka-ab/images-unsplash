@@ -1,15 +1,14 @@
-import Header from "./components/Header";
+import Header from "./components/header/Header";
 import Home from "./pages/Home";
 import History from "./pages/History";
-
+import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
-import ScrollToTop from "./components/Scroll";
+import ScrollToTop from "./components/scroll/Scroll";
 
 const abortController: any = new AbortController();
 
 function App() {
-  //states
   const [query, setQuery] = useState("");
   const [popularImg, setPopularImg] = useState<string[]>([]);
   const [images, setImages] = useState<string[]>([]);
@@ -21,13 +20,11 @@ function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
 
-  //API
-  const API_KEY = "PS42lTr_bUk9aFQuXpup3MgIBUQ9EhDcOCwlccrOHnU";
+  const API_KEY = "2N7FmY6e7nQnFyHbKP8TDTI9ZwRgaUzFz4VvSJspxOk";
   const BASE_URL = "https://api.unsplash.com/";
   const popularURL = `${BASE_URL}photos?page=${page}&per_page=20&order_by=popular&client_id=${API_KEY}`;
   const searchURL = `${BASE_URL}search/photos?query=${query}&page=${page}&per_page=20&client_id=${API_KEY}`;
 
-  //popular image fetching
   useEffect(() => {
     setIsLoading(true);
 
@@ -41,7 +38,6 @@ function App() {
     abortController.abort();
   }, [popularPage, status]);
 
-  //searched image fetching
   useEffect(() => {
     if (query.length < 2) setStatus("popular");
     if (query.length < 2) setImages([]);
@@ -65,7 +61,6 @@ function App() {
     };
   }, [page, query]);
 
-  //infinity scroll
   useEffect(() => {
     const handleScroll = () => {
       if (

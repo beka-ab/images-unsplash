@@ -1,6 +1,7 @@
-import { ImagesProps } from "../types";
-import Img from "./Image";
-import Loader from "./Loader";
+import { ImagesProps } from "../../types";
+import Img from "../image/Image";
+import Loader from "../Loader";
+import "./photos.css";
 
 const Images = ({
   images,

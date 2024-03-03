@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useEffect, useState } from "react";
-
+import "./modal.css";
 import { faEye, faDownload, faHeart } from "@fortawesome/free-solid-svg-icons";
-import { ModalProps } from "../types";
+import { ModalProps } from "../../types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const API_KEY = "PS42lTr_bUk9aFQuXpup3MgIBUQ9EhDcOCwlccrOHnU";

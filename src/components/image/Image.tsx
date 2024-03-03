@@ -1,4 +1,5 @@
-import { ImgProps } from "../types";
+import { ImgProps } from "../../types";
+import "./image.css";
 
 const Img = ({ image, setSelectedImage, setModalOpen }: ImgProps) => {
   return (

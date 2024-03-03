@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import Scroll from "./Scroll";
+import Scroll from "../scroll/Scroll";
+import "./header.css";
 
 const Navbar: React.FC = () => {
   useEffect(() => {
