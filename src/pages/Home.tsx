@@ -1,97 +1,65 @@
-import React, { useEffect, useRef, useState } from "react";
-import { usePopularPhotos, useSearchPhotos } from "../api/unsplash";
+import { useRef } from "react";
+import Images from "../components/Photos";
+import Modal from "../components/Modal";
+import { useKey } from "../helper/useCustom";
+import { HomeProps } from "../types";
 
-import SearchBar from "../components/searchbar/SearchBar";
-import PhotoGrid from "../components/Photos/Photos";
+const Home = ({
+  query,
+  setQuery,
+  images,
+  isLoading,
+  setStatus,
+  popularImg,
+  status,
+  modalOpen,
+  setModalOpen,
+  selectedImage,
+  setSelectedImage,
+}: HomeProps) => {
+  const inputEl = useRef<HTMLInputElement>(null);
 
-interface Photo {
-  id: string;
-  urls: { small: string };
-  alt_description: string;
-}
-
-const Home: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
-  const [popularPage, setPopularPage] = useState(1);
-  const [searchedPage, setSearchedPage] = useState(1);
-  const [photos, setPhotos] = useState<Photo[]>([]);
-  const hasMorePopular = useRef(true);
-  const hasMoreSearched = useRef(true);
-  const { isLoading: isLoadingPopular, data: popularData } =
-    usePopularPhotos(popularPage);
-  const {
-    isLoading: isLoadingSearched,
-    data: searchedData,
-    refetch: refetchSearched,
-  } = useSearchPhotos(searchQuery, searchedPage);
-  const [searchHistory, setSearchHistory] = useState(() => {
-    const history = localStorage.getItem("searchHistory");
-    return history ? JSON.parse(history) : [];
+  useKey("Enter", () => {
+    if (document.activeElement === inputEl.current) return;
+    if (inputEl.current !== null) {
+      inputEl.current.focus();
+    }
+    setQuery("");
   });
 
-  const getSearchQuery = (query: string) => {
-    setSearchQuery(query);
+  const handleQuery = (e: any) => {
+    setQuery(e.target.value);
+    setStatus("searching");
   };
-
-  useEffect(() => {
-    setIsSearching(searchQuery.trim().length > 0);
-
-    if (searchQuery.trim()) {
-      const updatedHistory = [searchQuery, ...searchHistory];
-      setSearchHistory(updatedHistory);
-      localStorage.setItem("searchHistory", JSON.stringify(updatedHistory));
-    }
-  }, [searchQuery]);
-
-  const handleScroll = () => {
-    const isAtBottom =
-      window.innerHeight + window.scrollY + 10 >= document.body.offsetHeight;
-
-    if (isAtBottom) {
-      if (isSearching && hasMoreSearched.current) {
-        setSearchedPage((prevPage) => prevPage + 1);
-        refetchSearched();
-      } else if (!isSearching && hasMorePopular.current) {
-        setPopularPage((prevPage) => prevPage + 1);
-      }
-    }
-  };
-
-  function deduplicatePhotos(photos: Photo[], newData: Photo[]) {
-    const photoIds = new Set(photos.map((photo) => photo.id));
-    return [...photos, ...newData.filter((photo) => !photoIds.has(photo.id))];
-  }
-
-  useEffect(() => {
-    setPhotos([]);
-    setSearchedPage(1);
-    setPopularPage(1);
-  }, [searchQuery, isSearching]);
-
-  useEffect(() => {
-    if (isSearching && searchedData) {
-      setPhotos((prev) => deduplicatePhotos(prev, searchedData));
-      hasMoreSearched.current = searchedData.length > 0;
-    }
-    if (!isSearching && popularData) {
-      setPhotos((prev) => deduplicatePhotos(prev, popularData));
-      hasMorePopular.current = popularData.length > 0;
-    }
-  }, [isSearching, popularData, searchedData]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isSearching]);
 
   return (
-    <main>
-      <SearchBar onSearch={getSearchQuery} />
-      <PhotoGrid photos={photos} />
-      {isLoadingPopular && <p>Loading...</p>}
-      {isLoadingSearched && <p>Loading...</p>}
-    </main>
+    <div className="home">
+      <h1 className="heading"> Photo Gallery</h1>
+
+      <div className="search-container">
+        <input
+          className="search"
+          type="text"
+          value={query}
+          onChange={handleQuery}
+          placeholder="Search ..."
+          ref={inputEl}
+        />
+      </div>
+      <Images
+        popularImg={popularImg}
+        images={images}
+        isLoading={isLoading}
+        status={status}
+        setSelectedImage={setSelectedImage}
+        setModalOpen={setModalOpen}
+      />
+      <Modal
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        selectedImage={selectedImage}
+      />
+    </div>
   );
 };
 

@@ -1,96 +1,61 @@
-import React, { useEffect, useRef, useState } from "react";
+import Loader from "../components/Loader";
+import { HistoryProps } from "../types";
 
-import { useSearchPhotos } from "../api/unsplash";
-
-import PhotoGrid from "../components/Photos/Photos";
-
-interface Photo {
-  id: string;
-  urls: { small: string };
-  alt_description: string;
-}
-
-const History: React.FC = () => {
-  const [searchHistory, setSearchHistory] = React.useState<string[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
-  const [searchedPage, setSearchedPage] = useState(1);
-  const [photos, setPhotos] = useState<Photo[]>([]);
-  const hasMoreSearched = useRef(true);
-  const {
-    isLoading: isLoadingSearched,
-    data: searchedData,
-    refetch: refetchSearched,
-  } = useSearchPhotos(searchQuery, searchedPage);
-
-  useEffect(() => {
-    const storedHistory = localStorage.getItem("searchHistory");
-    if (storedHistory) {
-      setSearchHistory(JSON.parse(storedHistory));
-    }
-  }, []);
-
-  useEffect(() => {
-    setIsSearching(searchQuery !== "");
-  }, [searchQuery]);
-
-  const handleScroll = () => {
-    const isAtBottom =
-      window.innerHeight + window.scrollY + 10 >= document.body.offsetHeight;
-
-    if (isAtBottom) {
-      if (isSearching && hasMoreSearched.current) {
-        setSearchedPage((prevPage) => prevPage + 1);
-        refetchSearched();
-      }
-    }
-  };
-
-  function deduplicatePhotos(photos: Photo[], newData: Photo[]) {
-    const photoIds = new Set(photos.map((photo) => photo.id));
-    return [...photos, ...newData.filter((photo) => !photoIds.has(photo.id))];
+const History = ({
+  searchHistory,
+  images,
+  isLoading,
+  setQuery,
+  setImages,
+  popularImg,
+  status,
+}: HistoryProps) => {
+  function onlyUnique(value: string, index: number, array: string[]) {
+    return array.indexOf(value) === index;
   }
 
-  useEffect(() => {
-    setPhotos([]);
-    setSearchedPage(1);
-  }, [searchQuery, isSearching]);
-
-  useEffect(() => {
-    if (isSearching && searchedData) {
-      setPhotos((prev) => deduplicatePhotos(prev, searchedData));
-      hasMoreSearched.current = searchedData.length > 0;
-    }
-  }, [isSearching, searchedData]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isSearching]);
+  const handleClick = (query: string) => {
+    setQuery(query);
+    setImages([]);
+  };
 
   return (
-    <main>
-      <div className="container">
-        <ul>
-          <p className="heading">Search History</p>
-          {searchHistory.map((query, index) => (
-            <li
-              key={index}
-              onClick={() => {
-                setSearchQuery(query);
-              }}
-            >
-              {query}
-            </li>
-          ))}
+    <div>
+      <h1 className="history-heading">Search History</h1>
+      <div className="history-container">
+        <ul className="history-list">
+          {searchHistory
+            .filter(onlyUnique)
+            .map((query: string, index: number) => (
+              <li key={index} onClick={() => handleClick(query)}>
+                {query}
+              </li>
+            ))}
         </ul>
-        <div>
-          <p className="heading">{searchQuery}</p>
-          <PhotoGrid photos={photos} />
+        <div className="img-container">
+          {status === "popular"
+            ? popularImg?.map((image: any) => (
+                <div className="image-box" key={crypto.randomUUID()}>
+                  <img
+                    className="image"
+                    src={image.urls.small}
+                    alt={image.alt_description}
+                  />
+                </div>
+              ))
+            : images?.map((image: any) => (
+                <div className="image-box" key={crypto.randomUUID()}>
+                  <img
+                    className="image"
+                    src={image.urls.small}
+                    alt={image.alt_description}
+                  />
+                </div>
+              ))}
+          {isLoading && <Loader />}
         </div>
-        {isLoadingSearched && <p>Loading...</p>}
       </div>
-    </main>
+    </div>
   );
 };
 

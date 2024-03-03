@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import Scroll from "./Scroll";
 
 const Navbar: React.FC = () => {
   useEffect(() => {
@@ -21,7 +22,7 @@ const Navbar: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const up = document.querySelector(".up") as HTMLElement;
+    const up = document.querySelector(".scroll-top") as HTMLElement;
     if (up) {
       up.addEventListener("click", () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -31,22 +32,21 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <nav>
-        <Link className="logo" to={"/"}>
-          Photo Gallery
-        </Link>
-        <ul>
-          <li>
-            <Link to={"/"}>Home</Link>
+      <nav className="navbar">
+        <ul className="lists">
+          <li className="list">
+            <Link className="list" to={"/"}>
+              Home
+            </Link>
           </li>
-          <li>
-            <Link to={"/history"}>History</Link>
+          <li className="list">
+            <Link className="list" to={"/history"}>
+              History
+            </Link>
           </li>
         </ul>
       </nav>
-      <button className="up">
-        <span className="material-symbols-outlined">arrow_upward</span>
-      </button>
+      <Scroll />
     </>
   );
 };
